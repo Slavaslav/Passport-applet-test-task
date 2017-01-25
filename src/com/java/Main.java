@@ -11,15 +11,25 @@ public class Main extends Applet {
     private static final String INPUT = "Input ";
     private static final String[] PASSPORT_FILED_NAMES = new String[]{"passportNo", "surname", "given names", "patronymic",
             "date birth", "place birth", "authority", "date of issue"};
-    private JPanel rootJPanel;
+    private JPanel mainJPanel;
 
     @Override
     public void init() {
-        setSize(500, 500);
+        setSize(500, 550);
         JPanel topButtonJPanel = initializeTopButtons();
-        rootJPanel = new JPanel();
+
+        mainJPanel = new JPanel();
+        mainJPanel.setLayout(new BoxLayout(mainJPanel, BoxLayout.Y_AXIS));
+
+        JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setViewportView(mainJPanel);
+        scrollPane.setPreferredSize(new Dimension(500, 500));
+
+        JPanel rootJPanel = new JPanel();
         rootJPanel.setLayout(new BoxLayout(rootJPanel, BoxLayout.Y_AXIS));
         rootJPanel.add(topButtonJPanel);
+        rootJPanel.add(scrollPane);
+
         this.add(rootJPanel);
     }
 
@@ -174,8 +184,8 @@ public class Main extends Applet {
 
     private void drawTableWithPassportData(ArrayList<TextField> textFields) {
         TablePassportData tablePassportData = new TablePassportData(textFields);
-        rootJPanel.add(tablePassportData);
-        rootJPanel.updateUI();
+        mainJPanel.add(tablePassportData);
+        mainJPanel.updateUI();
     }
 
     private class TablePassportData extends JPanel {
