@@ -52,9 +52,10 @@ public class Main extends Applet {
         topButtonJPanel.setLayout(new BoxLayout(topButtonJPanel, BoxLayout.X_AXIS));
         topButtonJPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         topButtonJPanel.add(openWindowInputPassportDataButton);
+        topButtonJPanel.add(Box.createRigidArea(new Dimension(5, 0)));
         topButtonJPanel.add(importFileButton);
+        topButtonJPanel.add(Box.createRigidArea(new Dimension(5, 0)));
         topButtonJPanel.add(exportFileButton);
-
         return topButtonJPanel;
     }
 
