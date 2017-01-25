@@ -195,14 +195,14 @@ public class Main extends Applet {
     private class TablePassportData extends JPanel {
         public TablePassportData(Passport passport) {
             setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            String[][] tableData = new String[passport.getTextFields().size()][passport.getTextFields().size()];
+            String[][] tableData = new String[passport.getPassportData().size()][passport.getPassportData().size()];
             for (int i = 0; i < tableData.length; i++) {
                 for (int j = 0; j < 2; j++) {
                     // first column
                     if (j == 0) {
                         tableData[i][j] = PASSPORT_FILED_NAMES[i];
                     } else {
-                        tableData[i][j] = passport.getTextFields().get(i).getText();
+                        tableData[i][j] = passport.getPassportData().get(i);
                     }
                 }
             }

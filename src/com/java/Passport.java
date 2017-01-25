@@ -4,14 +4,15 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class Passport {
-    private ArrayList<JTextField> textFields;
+    private ArrayList<String> passportData = new ArrayList<>();
 
     public Passport(ArrayList<JTextField> textFields) {
-
-        this.textFields = textFields;
+        for (JTextField field : textFields) {
+            passportData.add(field.getText());
+        }
     }
 
-    public ArrayList<JTextField> getTextFields() {
-        return textFields;
+    public ArrayList<String> getPassportData() {
+        return passportData;
     }
 }
