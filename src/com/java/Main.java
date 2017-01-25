@@ -33,9 +33,13 @@ public class Main extends Applet {
         labels.add(new Label("Input place birth:"));
         labels.add(new Label("Input authority:"));
         labels.add(new Label("Input date of issue:"));
+        final Label errorEmptyFields = new Label("Error! One or more fields are not filled!");
+        errorEmptyFields.setVisible(false);
+        errorEmptyFields.setForeground(Color.RED);
+        labels.add(errorEmptyFields);
 
         final int columnsTextField = 40;
-        ArrayList<TextField> textFields = new ArrayList<>();
+        final ArrayList<TextField> textFields = new ArrayList<>();
         textFields.add(new TextField(columnsTextField));
         textFields.add(new TextField(columnsTextField));
         textFields.add(new TextField(columnsTextField));
@@ -49,7 +53,17 @@ public class Main extends Applet {
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("click ok");
+                for (TextField field : textFields) {
+                    if (field.getText().isEmpty()) {
+                        errorEmptyFields.setVisible(true);
+                        frame.pack();
+                        return;
+                    }
+                }
+                if (errorEmptyFields.isVisible()) {
+                    errorEmptyFields.setVisible(false);
+                    frame.pack();
+                }
             }
         });
         Button closeButton = new Button("Close");
@@ -65,8 +79,12 @@ public class Main extends Applet {
 
         int biggerArraySize = labels.size() >= textFields.size() ? labels.size() : textFields.size();
         for (int i = 0; i < biggerArraySize; i++) {
-            jPanelLabelAndTextFields.add(labels.get(i));
-            jPanelLabelAndTextFields.add(textFields.get(i));
+            if (i < labels.size()) {
+                jPanelLabelAndTextFields.add(labels.get(i));
+            }
+            if (i < textFields.size()) {
+                jPanelLabelAndTextFields.add(textFields.get(i));
+            }
         }
 
         JPanel jPanelButtons = new JPanel();
