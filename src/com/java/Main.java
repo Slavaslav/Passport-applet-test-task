@@ -146,23 +146,30 @@ public class Main extends Applet {
     }
 
     private void handleOnClickOkButton(ArrayList<Label> labels, ArrayList<TextField> textFields, JFrame frame) {
-        checkIfEmptyFieldExist(labels, textFields, frame);
-        drawTableWithPassportData(textFields);
+        boolean isEmptyField = isEmptyFieldExist(labels, textFields, frame);
+        if (!isEmptyField) {
+            drawTableWithPassportData(textFields);
+        }
     }
 
-    private void checkIfEmptyFieldExist(ArrayList<Label> labels, ArrayList<TextField> textFields, JFrame frame) {
+    private boolean isEmptyFieldExist(ArrayList<Label> labels, ArrayList<TextField> textFields, JFrame frame) {
         Label errorEmptyLabel = labels.get(labels.size() - 1);
+        boolean isEmptyField = false;
         for (TextField field : textFields) {
             if (field.getText().isEmpty()) {
                 errorEmptyLabel.setVisible(true);
                 frame.pack();
-                return;
+                isEmptyField = true;
+                break;
             }
         }
-        if (errorEmptyLabel.isVisible()) {
-            errorEmptyLabel.setVisible(false);
-            frame.pack();
+        if (!isEmptyField) {
+            if (errorEmptyLabel.isVisible()) {
+                errorEmptyLabel.setVisible(false);
+                frame.pack();
+            }
         }
+        return isEmptyField;
     }
 
     private void drawTableWithPassportData(ArrayList<TextField> textFields) {
