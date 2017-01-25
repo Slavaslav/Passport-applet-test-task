@@ -15,7 +15,7 @@ public class Main extends Applet {
 
     @Override
     public void init() {
-        setSize(500, 550);
+        setSize(530, 540);
         JPanel topButtonJPanel = initializeTopButtons();
 
         mainJPanel = new JPanel();
@@ -34,7 +34,7 @@ public class Main extends Applet {
     }
 
     private JPanel initializeTopButtons() {
-        Button openWindowInputPassportDataButton = new Button("Open a new window for entering the passport data");
+        JButton openWindowInputPassportDataButton = new JButton("Open a new window for entering the passport data");
         openWindowInputPassportDataButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -42,7 +42,7 @@ public class Main extends Applet {
             }
         });
 
-        Button importFileButton = new Button("Import file");
+        JButton importFileButton = new JButton("Import file");
         importFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -50,7 +50,7 @@ public class Main extends Applet {
             }
         });
 
-        Button exportFileButton = new Button("Export file");
+        JButton exportFileButton = new JButton("Export file");
         exportFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,17 +72,17 @@ public class Main extends Applet {
     private void openNewJFrameInputPassportData() {
         final JFrame frame = new JFrame("Input Passport Data");
 
-        final ArrayList<Label> labels = initializeLabels();
-        final ArrayList<TextField> textFields = initializeTextFields();
+        final ArrayList<JLabel> labels = initializeLabels();
+        final ArrayList<JTextField> textFields = initializeTextFields();
 
-        Button okButton = new Button("Ok");
+        JButton okButton = new JButton("Ok");
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 handleOnClickOkButton(labels, textFields, frame);
             }
         });
-        Button closeButton = new Button("Close");
+        JButton closeButton = new JButton("Close");
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -90,7 +90,7 @@ public class Main extends Applet {
             }
         });
 
-        JPanel jPanelRoot = initializeJPanels(labels, textFields, new Button[]{okButton, closeButton});
+        JPanel jPanelRoot = initializeJPanels(labels, textFields, new JButton[]{okButton, closeButton});
 
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.add(jPanelRoot);
@@ -98,34 +98,34 @@ public class Main extends Applet {
         frame.setVisible(true);
     }
 
-    private ArrayList<Label> initializeLabels() {
-        ArrayList<Label> labels = new ArrayList<>();
+    private ArrayList<JLabel> initializeLabels() {
+        ArrayList<JLabel> labels = new ArrayList<>();
         for (String labelNames : PASSPORT_FILED_NAMES) {
-            labels.add(new Label(INPUT.concat(labelNames).concat(":")));
+            labels.add(new JLabel(INPUT.concat(labelNames).concat(":")));
         }
         // label error must be last element in array
-        final Label errorEmptyFields = new Label("Error! One or more fields are not filled!");
+        final JLabel errorEmptyFields = new JLabel("Error! One or more fields are not filled!");
         errorEmptyFields.setVisible(false);
         errorEmptyFields.setForeground(Color.RED);
         labels.add(errorEmptyFields);
         return labels;
     }
 
-    private ArrayList<TextField> initializeTextFields() {
+    private ArrayList<JTextField> initializeTextFields() {
         final int columnsTextField = 40;
-        ArrayList<TextField> textFields = new ArrayList<>();
-        textFields.add(new TextField(columnsTextField));
-        textFields.add(new TextField(columnsTextField));
-        textFields.add(new TextField(columnsTextField));
-        textFields.add(new TextField(columnsTextField));
-        textFields.add(new TextField(columnsTextField));
-        textFields.add(new TextField(columnsTextField));
-        textFields.add(new TextField(columnsTextField));
-        textFields.add(new TextField(columnsTextField));
+        ArrayList<JTextField> textFields = new ArrayList<>();
+        textFields.add(new JTextField(columnsTextField));
+        textFields.add(new JTextField(columnsTextField));
+        textFields.add(new JTextField(columnsTextField));
+        textFields.add(new JTextField(columnsTextField));
+        textFields.add(new JTextField(columnsTextField));
+        textFields.add(new JTextField(columnsTextField));
+        textFields.add(new JTextField(columnsTextField));
+        textFields.add(new JTextField(columnsTextField));
         return textFields;
     }
 
-    private JPanel initializeJPanels(ArrayList<Label> labels, ArrayList<TextField> textFields, Button[] buttons) {
+    private JPanel initializeJPanels(ArrayList<JLabel> labels, ArrayList<JTextField> textFields, JButton[] buttons) {
         JPanel jPanelLabelAndTextFields = new JPanel();
         jPanelLabelAndTextFields.setLayout(new BoxLayout(jPanelLabelAndTextFields, BoxLayout.Y_AXIS));
 
@@ -141,7 +141,7 @@ public class Main extends Applet {
 
         JPanel jPanelButtons = new JPanel();
         jPanelButtons.setLayout(new BoxLayout(jPanelButtons, BoxLayout.X_AXIS));
-        for (Button button : buttons) {
+        for (JButton button : buttons) {
             jPanelButtons.add(button);
 
         }
@@ -155,17 +155,17 @@ public class Main extends Applet {
         return jPanelRootPassportWindow;
     }
 
-    private void handleOnClickOkButton(ArrayList<Label> labels, ArrayList<TextField> textFields, JFrame frame) {
+    private void handleOnClickOkButton(ArrayList<JLabel> labels, ArrayList<JTextField> textFields, JFrame frame) {
         boolean isEmptyField = isEmptyFieldExist(labels, textFields, frame);
         if (!isEmptyField) {
             drawTableWithPassportData(textFields);
         }
     }
 
-    private boolean isEmptyFieldExist(ArrayList<Label> labels, ArrayList<TextField> textFields, JFrame frame) {
-        Label errorEmptyLabel = labels.get(labels.size() - 1);
+    private boolean isEmptyFieldExist(ArrayList<JLabel> labels, ArrayList<JTextField> textFields, JFrame frame) {
+        JLabel errorEmptyLabel = labels.get(labels.size() - 1);
         boolean isEmptyField = false;
-        for (TextField field : textFields) {
+        for (JTextField field : textFields) {
             if (field.getText().isEmpty()) {
                 errorEmptyLabel.setVisible(true);
                 frame.pack();
@@ -182,14 +182,14 @@ public class Main extends Applet {
         return isEmptyField;
     }
 
-    private void drawTableWithPassportData(ArrayList<TextField> textFields) {
+    private void drawTableWithPassportData(ArrayList<JTextField> textFields) {
         TablePassportData tablePassportData = new TablePassportData(textFields);
         mainJPanel.add(tablePassportData);
         mainJPanel.updateUI();
     }
 
     private class TablePassportData extends JPanel {
-        public TablePassportData(ArrayList<TextField> textFields) {
+        public TablePassportData(ArrayList<JTextField> textFields) {
             setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             String[][] tableData = new String[textFields.size()][textFields.size()];
             for (int i = 0; i < tableData.length; i++) {
