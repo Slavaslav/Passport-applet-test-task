@@ -1,5 +1,6 @@
 package com.java;
 
+import javax.swing.*;
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,8 +14,17 @@ public class Main extends Applet {
         openWindowInputPassportData.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                openNewJFrameInputPassportData();
             }
         });
         this.add(openWindowInputPassportData);
+    }
+
+    private void openNewJFrameInputPassportData() {
+        JFrame frame = new JFrame("Input Passport Data");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(new Button("Test"), BorderLayout.CENTER);
+        frame.pack();
+        frame.setVisible(true);
     }
 }
