@@ -5,6 +5,7 @@ import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Main extends Applet {
 
@@ -23,24 +24,27 @@ public class Main extends Applet {
     private void openNewJFrameInputPassportData() {
         final JFrame frame = new JFrame("Input Passport Data");
 
-        Label passportNoLabel = new Label("Input passportNo:");
-        Label surnameLabel = new Label("Input surname:");
-        Label givenNamesLabel = new Label("Input given names:");
-        Label patronymicLabel = new Label("Input patronymic:");
-        Label dateBirthLabel = new Label("Input date birth:");
-        Label placeBirthLabel = new Label("Input place birth:");
-        Label authorityLabel = new Label("Input authority:");
-        Label dateOfIssueLabel = new Label("Input date of issue:");
+        ArrayList<Label> labels = new ArrayList<>();
+        labels.add(new Label("Input passportNo:"));
+        labels.add(new Label("Input surname:"));
+        labels.add(new Label("Input given names:"));
+        labels.add(new Label("Input patronymic:"));
+        labels.add(new Label("Input date birth:"));
+        labels.add(new Label("Input place birth:"));
+        labels.add(new Label("Input authority:"));
+        labels.add(new Label("Input date of issue:"));
 
         final int columnsTextField = 40;
-        TextField passportNoTextField = new TextField(columnsTextField);
-        TextField surnameTextField = new TextField(columnsTextField);
-        TextField givenNamesTextField = new TextField(columnsTextField);
-        TextField patronymicTextField = new TextField(columnsTextField);
-        TextField dateBirthTextField = new TextField(columnsTextField);
-        TextField placeBirthTextField = new TextField(columnsTextField);
-        TextField authorityTextField = new TextField(columnsTextField);
-        TextField dateOfIssueTextField = new TextField(columnsTextField);
+        ArrayList<TextField> textFields = new ArrayList<>();
+        textFields.add(new TextField(columnsTextField));
+        textFields.add(new TextField(columnsTextField));
+        textFields.add(new TextField(columnsTextField));
+        textFields.add(new TextField(columnsTextField));
+        textFields.add(new TextField(columnsTextField));
+        textFields.add(new TextField(columnsTextField));
+        textFields.add(new TextField(columnsTextField));
+        textFields.add(new TextField(columnsTextField));
+
         Button okButton = new Button("Ok");
         okButton.addActionListener(new ActionListener() {
             @Override
@@ -56,24 +60,14 @@ public class Main extends Applet {
             }
         });
 
-        JPanel jPanelTextFields = new JPanel();
-        jPanelTextFields.setLayout(new BoxLayout(jPanelTextFields, BoxLayout.Y_AXIS));
-        jPanelTextFields.add(passportNoLabel);
-        jPanelTextFields.add(passportNoTextField);
-        jPanelTextFields.add(surnameLabel);
-        jPanelTextFields.add(surnameTextField);
-        jPanelTextFields.add(givenNamesLabel);
-        jPanelTextFields.add(givenNamesTextField);
-        jPanelTextFields.add(patronymicLabel);
-        jPanelTextFields.add(patronymicTextField);
-        jPanelTextFields.add(dateBirthLabel);
-        jPanelTextFields.add(dateBirthTextField);
-        jPanelTextFields.add(placeBirthLabel);
-        jPanelTextFields.add(placeBirthTextField);
-        jPanelTextFields.add(authorityLabel);
-        jPanelTextFields.add(authorityTextField);
-        jPanelTextFields.add(dateOfIssueLabel);
-        jPanelTextFields.add(dateOfIssueTextField);
+        JPanel jPanelLabelAndTextFields = new JPanel();
+        jPanelLabelAndTextFields.setLayout(new BoxLayout(jPanelLabelAndTextFields, BoxLayout.Y_AXIS));
+
+        int biggerArraySize = labels.size() >= textFields.size() ? labels.size() : textFields.size();
+        for (int i = 0; i < biggerArraySize; i++) {
+            jPanelLabelAndTextFields.add(labels.get(i));
+            jPanelLabelAndTextFields.add(textFields.get(i));
+        }
 
         JPanel jPanelButtons = new JPanel();
         jPanelButtons.setLayout(new BoxLayout(jPanelButtons, BoxLayout.X_AXIS));
@@ -83,7 +77,7 @@ public class Main extends Applet {
         JPanel jPanelRoot = new JPanel();
         jPanelRoot.setLayout(new BoxLayout(jPanelRoot, BoxLayout.Y_AXIS));
         jPanelRoot.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        jPanelRoot.add(jPanelTextFields);
+        jPanelRoot.add(jPanelLabelAndTextFields);
         jPanelRoot.add(jPanelButtons);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
