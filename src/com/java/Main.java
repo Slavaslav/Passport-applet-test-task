@@ -8,6 +8,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class Main extends Applet {
+    private static final String INPUT = "Input ";
+    private static final String[] PASSPORT_FILED_NAMES = new String[]{"passportNo", "surname", "given names", "patronymic",
+            "date birth", "place birth", "authority", "date of issue"};
+    private JPanel rootJPanel;
 
     @Override
     public void init() {
@@ -18,7 +22,11 @@ public class Main extends Applet {
                 openNewJFrameInputPassportData();
             }
         });
-        this.add(openWindowInputPassportData);
+
+        rootJPanel = new JPanel();
+        rootJPanel.setLayout(new BoxLayout(rootJPanel, BoxLayout.Y_AXIS));
+        rootJPanel.add(openWindowInputPassportData);
+        this.add(rootJPanel);
     }
 
     private void openNewJFrameInputPassportData() {
@@ -52,14 +60,9 @@ public class Main extends Applet {
 
     private ArrayList<Label> initializeLabels() {
         ArrayList<Label> labels = new ArrayList<>();
-        labels.add(new Label("Input passportNo:"));
-        labels.add(new Label("Input surname:"));
-        labels.add(new Label("Input given names:"));
-        labels.add(new Label("Input patronymic:"));
-        labels.add(new Label("Input date birth:"));
-        labels.add(new Label("Input place birth:"));
-        labels.add(new Label("Input authority:"));
-        labels.add(new Label("Input date of issue:"));
+        for (String labelNames : PASSPORT_FILED_NAMES) {
+            labels.add(new Label(INPUT.concat(labelNames).concat(":")));
+        }
         // label error must be last element in array
         final Label errorEmptyFields = new Label("Error! One or more fields are not filled!");
         errorEmptyFields.setVisible(false);
@@ -103,18 +106,18 @@ public class Main extends Applet {
 
         }
 
-        JPanel jPanelRoot = new JPanel();
-        jPanelRoot.setLayout(new BoxLayout(jPanelRoot, BoxLayout.Y_AXIS));
-        jPanelRoot.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        jPanelRoot.add(jPanelLabelAndTextFields);
-        jPanelRoot.add(jPanelButtons);
+        JPanel jPanelRootPassportWindow = new JPanel();
+        jPanelRootPassportWindow.setLayout(new BoxLayout(jPanelRootPassportWindow, BoxLayout.Y_AXIS));
+        jPanelRootPassportWindow.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        jPanelRootPassportWindow.add(jPanelLabelAndTextFields);
+        jPanelRootPassportWindow.add(jPanelButtons);
 
-        return jPanelRoot;
+        return jPanelRootPassportWindow;
     }
 
     private void handleOnClickOkButton(ArrayList<Label> labels, ArrayList<TextField> textFields, JFrame frame) {
         checkIfEmptyFieldExist(labels, textFields, frame);
-        drawTableWithPassportData();
+        drawTableWithPassportData(textFields);
     }
 
     private void checkIfEmptyFieldExist(ArrayList<Label> labels, ArrayList<TextField> textFields, JFrame frame) {
@@ -132,7 +135,29 @@ public class Main extends Applet {
         }
     }
 
-    private void drawTableWithPassportData() {
+    private void drawTableWithPassportData(ArrayList<TextField> textFields) {
+        TablePassportData tablePassportData = new TablePassportData(textFields);
+        rootJPanel.add(tablePassportData);
+        rootJPanel.updateUI();
+    }
 
+    private class TablePassportData extends JPanel {
+        public TablePassportData(ArrayList<TextField> textFields) {
+            setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            String[][] tableData = new String[textFields.size()][textFields.size()];
+            for (int i = 0; i < tableData.length; i++) {
+                for (int j = 0; j < 2; j++) {
+                    // first column
+                    if (j == 0) {
+                        tableData[i][j] = PASSPORT_FILED_NAMES[i];
+                    } else {
+                        tableData[i][j] = textFields.get(i).getText();
+                    }
+                }
+            }
+            String[] columnNames = {"Labels", "Data"};
+            JTable jTable = new JTable(tableData, columnNames);
+            add(jTable);
+        }
     }
 }
