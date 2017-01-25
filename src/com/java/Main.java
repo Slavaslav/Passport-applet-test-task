@@ -82,7 +82,7 @@ public class Main extends Applet {
 
         JPanel jPanelRoot = initializeJPanels(labels, textFields, new Button[]{okButton, closeButton});
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.add(jPanelRoot);
         frame.pack();
         frame.setVisible(true);
