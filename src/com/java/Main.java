@@ -15,18 +15,47 @@ public class Main extends Applet {
 
     @Override
     public void init() {
-        Button openWindowInputPassportData = new Button("Open a new window for entering the passport data");
-        openWindowInputPassportData.addActionListener(new ActionListener() {
+        setSize(500, 500);
+        JPanel topButtonJPanel = initializeTopButtons();
+        rootJPanel = new JPanel();
+        rootJPanel.setLayout(new BoxLayout(rootJPanel, BoxLayout.Y_AXIS));
+        rootJPanel.add(topButtonJPanel);
+        this.add(rootJPanel);
+    }
+
+    private JPanel initializeTopButtons() {
+        Button openWindowInputPassportDataButton = new Button("Open a new window for entering the passport data");
+        openWindowInputPassportDataButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 openNewJFrameInputPassportData();
             }
         });
 
-        rootJPanel = new JPanel();
-        rootJPanel.setLayout(new BoxLayout(rootJPanel, BoxLayout.Y_AXIS));
-        rootJPanel.add(openWindowInputPassportData);
-        this.add(rootJPanel);
+        Button importFileButton = new Button("Import file");
+        importFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // empty
+            }
+        });
+
+        Button exportFileButton = new Button("Export file");
+        exportFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // empty
+            }
+        });
+
+        JPanel topButtonJPanel = new JPanel();
+        topButtonJPanel.setLayout(new BoxLayout(topButtonJPanel, BoxLayout.X_AXIS));
+        topButtonJPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        topButtonJPanel.add(openWindowInputPassportDataButton);
+        topButtonJPanel.add(importFileButton);
+        topButtonJPanel.add(exportFileButton);
+
+        return topButtonJPanel;
     }
 
     private void openNewJFrameInputPassportData() {
