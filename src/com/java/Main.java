@@ -9,8 +9,6 @@ import java.util.ArrayList;
 
 public class Main extends Applet {
     private static final String INPUT = "Input ";
-    private static final String[] PASSPORT_FILED_NAMES = new String[]{"passportNo", "surname", "given names", "patronymic",
-            "date birth", "place birth", "authority", "date of issue"};
     private JPanel mainJPanel;
     private ArrayList<Passport> passports = new ArrayList<>();
 
@@ -101,7 +99,7 @@ public class Main extends Applet {
 
     private ArrayList<JLabel> initializeLabels() {
         ArrayList<JLabel> labels = new ArrayList<>();
-        for (String labelNames : PASSPORT_FILED_NAMES) {
+        for (String labelNames : Passport.PASSPORT_FILED_NAMES) {
             labels.add(new JLabel(INPUT.concat(labelNames).concat(":")));
         }
         // label error must be last element in array
@@ -200,7 +198,7 @@ public class Main extends Applet {
                 for (int j = 0; j < 2; j++) {
                     // first column
                     if (j == 0) {
-                        tableData[i][j] = PASSPORT_FILED_NAMES[i];
+                        tableData[i][j] = Passport.PASSPORT_FILED_NAMES[i];
                     } else {
                         tableData[i][j] = passport.getPassportData().get(i);
                     }
