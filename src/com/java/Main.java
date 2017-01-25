@@ -12,6 +12,7 @@ public class Main extends Applet {
     private static final String[] PASSPORT_FILED_NAMES = new String[]{"passportNo", "surname", "given names", "patronymic",
             "date birth", "place birth", "authority", "date of issue"};
     private JPanel mainJPanel;
+    private ArrayList<Passport> passports = new ArrayList<>();
 
     @Override
     public void init() {
@@ -158,7 +159,10 @@ public class Main extends Applet {
     private void handleOnClickOkButton(ArrayList<JLabel> labels, ArrayList<JTextField> textFields, JFrame frame) {
         boolean isEmptyField = isEmptyFieldExist(labels, textFields, frame);
         if (!isEmptyField) {
-            drawTableWithPassportData(textFields);
+            Passport passport = new Passport(textFields);
+            drawTableWithPassportData(passport);
+            passports.add(passport);
+
         }
     }
 
@@ -182,23 +186,23 @@ public class Main extends Applet {
         return isEmptyField;
     }
 
-    private void drawTableWithPassportData(ArrayList<JTextField> textFields) {
-        TablePassportData tablePassportData = new TablePassportData(textFields);
+    private void drawTableWithPassportData(Passport passport) {
+        TablePassportData tablePassportData = new TablePassportData(passport);
         mainJPanel.add(tablePassportData);
         mainJPanel.updateUI();
     }
 
     private class TablePassportData extends JPanel {
-        public TablePassportData(ArrayList<JTextField> textFields) {
+        public TablePassportData(Passport passport) {
             setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            String[][] tableData = new String[textFields.size()][textFields.size()];
+            String[][] tableData = new String[passport.getTextFields().size()][passport.getTextFields().size()];
             for (int i = 0; i < tableData.length; i++) {
                 for (int j = 0; j < 2; j++) {
                     // first column
                     if (j == 0) {
                         tableData[i][j] = PASSPORT_FILED_NAMES[i];
                     } else {
-                        tableData[i][j] = textFields.get(i).getText();
+                        tableData[i][j] = passport.getTextFields().get(i).getText();
                     }
                 }
             }
