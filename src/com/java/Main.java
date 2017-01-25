@@ -82,21 +82,6 @@ public class Main extends Applet {
         return textFields;
     }
 
-    private void handleOnClickOkButton(ArrayList<Label> labels, ArrayList<TextField> textFields, JFrame frame) {
-        Label errorEmptyLabel = labels.get(labels.size() - 1);
-        for (TextField field : textFields) {
-            if (field.getText().isEmpty()) {
-                errorEmptyLabel.setVisible(true);
-                frame.pack();
-                return;
-            }
-        }
-        if (errorEmptyLabel.isVisible()) {
-            errorEmptyLabel.setVisible(false);
-            frame.pack();
-        }
-    }
-
     private JPanel initializeJPanels(ArrayList<Label> labels, ArrayList<TextField> textFields, Button[] buttons) {
         JPanel jPanelLabelAndTextFields = new JPanel();
         jPanelLabelAndTextFields.setLayout(new BoxLayout(jPanelLabelAndTextFields, BoxLayout.Y_AXIS));
@@ -125,5 +110,29 @@ public class Main extends Applet {
         jPanelRoot.add(jPanelButtons);
 
         return jPanelRoot;
+    }
+
+    private void handleOnClickOkButton(ArrayList<Label> labels, ArrayList<TextField> textFields, JFrame frame) {
+        checkIfEmptyFieldExist(labels, textFields, frame);
+        drawTableWithPassportData();
+    }
+
+    private void checkIfEmptyFieldExist(ArrayList<Label> labels, ArrayList<TextField> textFields, JFrame frame) {
+        Label errorEmptyLabel = labels.get(labels.size() - 1);
+        for (TextField field : textFields) {
+            if (field.getText().isEmpty()) {
+                errorEmptyLabel.setVisible(true);
+                frame.pack();
+                return;
+            }
+        }
+        if (errorEmptyLabel.isVisible()) {
+            errorEmptyLabel.setVisible(false);
+            frame.pack();
+        }
+    }
+
+    private void drawTableWithPassportData() {
+
     }
 }
