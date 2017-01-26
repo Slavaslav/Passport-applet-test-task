@@ -78,15 +78,11 @@ public class Main extends Applet {
 
     private void exportPassportDataToFile() {
         if (passports.size() > 0) {
-            JFileChooser fileChooser = new JFileChooser();
-            FileFilter filter = new FileNameExtensionFilter("Passport data", "psdt");
-            fileChooser.setFileFilter(filter);
-            int returnVal = fileChooser.showOpenDialog(null);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
+            File selectedFile = getSelectedFileFromFileChooser();
+            if (selectedFile != null) {
                 BufferedWriter writer = null;
                 try {
-                    writer = new BufferedWriter(new FileWriter(file));
+                    writer = new BufferedWriter(new FileWriter(selectedFile));
                     StringBuilder stringBuilder = new StringBuilder();
                     for (Passport passport : passports) {
                         for (int i = 0; i < passport.getPassportData().size(); i++) {
@@ -238,6 +234,19 @@ public class Main extends Applet {
         TablePassportData tablePassportData = new TablePassportData(passport);
         mainJPanel.add(tablePassportData);
         mainJPanel.updateUI();
+    }
+
+    private File getSelectedFileFromFileChooser() {
+        JFileChooser fileChooser = new JFileChooser();
+        FileFilter filter = new FileNameExtensionFilter("Passport data (*.psdt)", "psdt");
+        fileChooser.setFileFilter(filter);
+        int returnVal = fileChooser.showOpenDialog(null);
+        File selectedFile = null;
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            selectedFile = fileChooser.getSelectedFile();
+        }
+
+        return selectedFile;
     }
 
     private class TablePassportData extends JPanel {
