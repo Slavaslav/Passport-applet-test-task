@@ -80,34 +80,7 @@ public class Main extends Applet {
         if (passports.size() > 0) {
             File selectedFile = getSelectedFileFromFileChooser();
             if (selectedFile != null) {
-                BufferedWriter writer = null;
-                try {
-                    writer = new BufferedWriter(new FileWriter(selectedFile));
-                    StringBuilder stringBuilder = new StringBuilder();
-                    for (Passport passport : passports) {
-                        for (int i = 0; i < passport.getPassportData().size(); i++) {
-                            stringBuilder.append(passport.getPassportData().get(i));
-                            if (i == passport.getPassportData().size() - 1) {
-                                stringBuilder.append("\n");
-                            } else {
-                                stringBuilder.append(",");
-                            }
-                        }
-                        writer.write(stringBuilder.toString());
-                        stringBuilder.delete(0, stringBuilder.length());
-                    }
-
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                } finally {
-                    if (writer != null) {
-                        try {
-                            writer.close();
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                }
+                writeDataToFile(selectedFile);
             }
         }
     }
@@ -247,6 +220,36 @@ public class Main extends Applet {
         }
 
         return selectedFile;
+    }
+
+    private void writeDataToFile(File selectedFile) {
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(selectedFile));
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Passport passport : passports) {
+                for (int i = 0; i < passport.getPassportData().size(); i++) {
+                    stringBuilder.append(passport.getPassportData().get(i));
+                    if (i == passport.getPassportData().size() - 1) {
+                        stringBuilder.append("\n");
+                    } else {
+                        stringBuilder.append(",");
+                    }
+                }
+                writer.write(stringBuilder.toString());
+                stringBuilder.delete(0, stringBuilder.length());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private class TablePassportData extends JPanel {
