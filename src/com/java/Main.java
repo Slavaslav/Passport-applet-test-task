@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Main extends Applet {
+    public static final String PASSPORT_NUMBER_IS_NOT_UNIQUE = "Passport number is not unique!";
     private static final String COMMA = ",";
     private static final String PASSPORT_DATA_PSDT = "Passport data (*.psdt)";
     private static final String PSDT = "psdt";
@@ -28,6 +29,8 @@ public class Main extends Applet {
     private JPanel mainJPanel;
     private JButton exportFileButton;
     private ArrayList<Passport> passports = new ArrayList<>();
+    private JLabel errorJFrameField;
+    private JFrame frameInputPassportData;
 
     @Override
     public void init() {
@@ -131,9 +134,41 @@ public class Main extends Applet {
     }
 
     private void handlePassportDataToShow(ArrayList<String> passportData) {
-        Passport passport = addAndGetNewPassport(passportData);
-        drawTableWithPassportData(passport);
-        showExportButton();
+        boolean isPassportUnique = isPassportNumberUnique(passportData);
+        if (isPassportUnique) {
+            Passport passport = addAndGetNewPassport(passportData);
+            drawTableWithPassportData(passport);
+            showExportButton();
+        }
+    }
+
+    private boolean isPassportNumberUnique(ArrayList<String> passportData) {
+        String passportNo = passportData.get(0);
+        boolean isPassportUnique = true;
+        for (Passport passport : passports) {
+            if (passport.getPassportData().get(0).equals(passportNo)) {
+                isPassportUnique = false;
+                showErrorJFrameField(PASSPORT_NUMBER_IS_NOT_UNIQUE);
+                break;
+            }
+        }
+        if (isPassportUnique) {
+            hideErrorJFrameField();
+        }
+        return isPassportUnique;
+    }
+
+    private void showErrorJFrameField(String textError) {
+        errorJFrameField.setText(textError);
+        errorJFrameField.setVisible(true);
+        frameInputPassportData.pack();
+    }
+
+    private void hideErrorJFrameField() {
+        if (errorJFrameField != null) {
+            errorJFrameField.setVisible(false);
+            frameInputPassportData.pack();
+        }
     }
 
     private void exportPassportDataToFile() {
@@ -146,7 +181,7 @@ public class Main extends Applet {
     }
 
     private void openNewJFrameInputPassportData() {
-        final JFrame frame = new JFrame(INPUT_PASSPORT_DATA);
+        frameInputPassportData = new JFrame(INPUT_PASSPORT_DATA);
 
         final ArrayList<JLabel> labels = initializeLabels();
         final ArrayList<JTextField> textFields = initializeTextFields();
@@ -155,23 +190,23 @@ public class Main extends Applet {
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleOnClickOkButton(labels, textFields, frame);
+                handleOnClickOkButton(textFields);
             }
         });
         JButton closeButton = new JButton(CLOSE);
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.dispose();
+                frameInputPassportData.dispose();
             }
         });
 
         JPanel jPanelRoot = initializeJPanels(labels, textFields, new JButton[]{okButton, closeButton});
 
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.add(jPanelRoot);
-        frame.pack();
-        frame.setVisible(true);
+        frameInputPassportData.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frameInputPassportData.add(jPanelRoot);
+        frameInputPassportData.pack();
+        frameInputPassportData.setVisible(true);
     }
 
     private ArrayList<JLabel> initializeLabels() {
@@ -179,11 +214,10 @@ public class Main extends Applet {
         for (String labelNames : Passport.PASSPORT_FILED_NAMES) {
             labels.add(new JLabel(Passport.INPUT.concat(labelNames).concat(Passport.DOTS)));
         }
-        // label error must be last element in array
-        final JLabel errorEmptyFields = new JLabel(ERROR_ONE_OR_MORE_FIELDS_ARE_NOT_FILLED);
-        errorEmptyFields.setVisible(false);
-        errorEmptyFields.setForeground(Color.RED);
-        labels.add(errorEmptyFields);
+        errorJFrameField = new JLabel();
+        errorJFrameField.setVisible(false);
+        errorJFrameField.setForeground(Color.RED);
+        labels.add(errorJFrameField);
         return labels;
     }
 
@@ -231,8 +265,8 @@ public class Main extends Applet {
         return jPanelRootPassportWindow;
     }
 
-    private void handleOnClickOkButton(ArrayList<JLabel> labels, ArrayList<JTextField> textFields, JFrame frame) {
-        boolean isEmptyField = isEmptyFieldExist(labels, textFields, frame);
+    private void handleOnClickOkButton(ArrayList<JTextField> textFields) {
+        boolean isEmptyField = isEmptyFieldExist(textFields);
         if (!isEmptyField) {
             ArrayList<String> passportData = new ArrayList<>();
             for (JTextField field : textFields) {
@@ -260,21 +294,18 @@ public class Main extends Applet {
         return passport;
     }
 
-    private boolean isEmptyFieldExist(ArrayList<JLabel> labels, ArrayList<JTextField> textFields, JFrame frame) {
-        JLabel errorEmptyLabel = labels.get(labels.size() - 1);
+    private boolean isEmptyFieldExist(ArrayList<JTextField> textFields) {
         boolean isEmptyField = false;
         for (JTextField field : textFields) {
             if (field.getText().isEmpty()) {
-                errorEmptyLabel.setVisible(true);
-                frame.pack();
                 isEmptyField = true;
+                showErrorJFrameField(ERROR_ONE_OR_MORE_FIELDS_ARE_NOT_FILLED);
                 break;
             }
         }
         if (!isEmptyField) {
-            if (errorEmptyLabel.isVisible()) {
-                errorEmptyLabel.setVisible(false);
-                frame.pack();
+            if (errorJFrameField.isVisible()) {
+                hideErrorJFrameField();
             }
         }
         return isEmptyField;
