@@ -78,12 +78,17 @@ public class Main extends Applet {
     private void importPassportDataFromFile() {
         File selectedFile = getSelectedFileFromFileChooser("Import data");
         if (selectedFile != null) {
-            if (passports.size() > 0) {
-                passports.clear();
-            }
             hideExportButton();
+            clearOldPassportData();
             readAndHandleDataFromFile(selectedFile);
         }
+    }
+
+    private void clearOldPassportData() {
+        if (passports.size() > 0) {
+            passports.clear();
+        }
+        mainJPanel.removeAll();
     }
 
     private void readAndHandleDataFromFile(File selectedFile) {
