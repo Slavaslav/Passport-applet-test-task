@@ -78,7 +78,7 @@ public class Main extends Applet {
 
     private void exportPassportDataToFile() {
         if (passports.size() > 0) {
-            File selectedFile = getSelectedFileFromFileChooser();
+            File selectedFile = getSelectedFileFromFileChooser("Export data");
             if (selectedFile != null) {
                 writeDataToFile(selectedFile);
             }
@@ -209,8 +209,9 @@ public class Main extends Applet {
         mainJPanel.updateUI();
     }
 
-    private File getSelectedFileFromFileChooser() {
+    private File getSelectedFileFromFileChooser(String dialogTitle) {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle(dialogTitle);
         FileFilter filter = new FileNameExtensionFilter("Passport data (*.psdt)", "psdt");
         fileChooser.setFileFilter(filter);
         int returnVal = fileChooser.showOpenDialog(null);
