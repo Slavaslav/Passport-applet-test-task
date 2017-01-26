@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class Main extends Applet {
     private static final String INPUT = "Input ";
     private JPanel mainJPanel;
+    private JButton exportFileButton;
     private ArrayList<Passport> passports = new ArrayList<>();
 
     @Override
@@ -55,51 +56,12 @@ public class Main extends Applet {
             }
         });
 
-        JButton exportFileButton = new JButton("Export file");
+        exportFileButton = new JButton("Export file");
+        exportFileButton.setEnabled(false);
         exportFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-//todo refactor
-                if (passports.size() > 0) {
-                    JFileChooser fileChooser = new JFileChooser();
-                    FileFilter filter = new FileNameExtensionFilter("Passport data", "psdt");
-                    fileChooser.setFileFilter(filter);
-                    int returnVal = fileChooser.showOpenDialog(null);
-                    if (returnVal == JFileChooser.APPROVE_OPTION) {
-                        File file = fileChooser.getSelectedFile();
-                        BufferedWriter writer = null;
-                        try {
-                            writer = new BufferedWriter(new FileWriter(file));
-                            StringBuilder stringBuilder = new StringBuilder();
-                            for (Passport passport : passports) {
-                                for (int i = 0; i < passport.getPassportData().size(); i++) {
-                                    stringBuilder.append(passport.getPassportData().get(i));
-                                    if (i == passport.getPassportData().size() - 1) {
-                                        stringBuilder.append("\n");
-                                    } else {
-                                        stringBuilder.append(",");
-                                    }
-                                }
-                                writer.write(stringBuilder.toString());
-                                stringBuilder.delete(0, stringBuilder.length());
-                            }
-
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        } finally {
-                            if (writer != null) {
-                                try {
-                                    writer.close();
-                                } catch (IOException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-                        }
-                    }
-                }
-
-
+                exportPassportDataToFile();
             }
         });
 
@@ -112,6 +74,46 @@ public class Main extends Applet {
         topButtonJPanel.add(Box.createRigidArea(new Dimension(5, 0)));
         topButtonJPanel.add(exportFileButton);
         return topButtonJPanel;
+    }
+
+    private void exportPassportDataToFile() {
+        if (passports.size() > 0) {
+            JFileChooser fileChooser = new JFileChooser();
+            FileFilter filter = new FileNameExtensionFilter("Passport data", "psdt");
+            fileChooser.setFileFilter(filter);
+            int returnVal = fileChooser.showOpenDialog(null);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                BufferedWriter writer = null;
+                try {
+                    writer = new BufferedWriter(new FileWriter(file));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (Passport passport : passports) {
+                        for (int i = 0; i < passport.getPassportData().size(); i++) {
+                            stringBuilder.append(passport.getPassportData().get(i));
+                            if (i == passport.getPassportData().size() - 1) {
+                                stringBuilder.append("\n");
+                            } else {
+                                stringBuilder.append(",");
+                            }
+                        }
+                        writer.write(stringBuilder.toString());
+                        stringBuilder.delete(0, stringBuilder.length());
+                    }
+
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } finally {
+                    if (writer != null) {
+                        try {
+                            writer.close();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void openNewJFrameInputPassportData() {
@@ -206,7 +208,9 @@ public class Main extends Applet {
             Passport passport = new Passport(textFields);
             drawTableWithPassportData(passport);
             passports.add(passport);
-
+            if (!exportFileButton.isEnabled()) {
+                exportFileButton.setEnabled(true);
+            }
         }
     }
 
