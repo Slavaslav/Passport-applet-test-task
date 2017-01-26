@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Main extends Applet {
-    public static final String PASSPORT_NUMBER_IS_NOT_UNIQUE = "Passport number is not unique!";
+    private static final String PASSPORT_NUMBER_IS_NOT_UNIQUE = "Passport number is not unique!";
     private static final String COMMA = ",";
     private static final String PASSPORT_DATA_PSDT = "Passport data (*.psdt)";
     private static final String PSDT = "psdt";
@@ -26,9 +26,9 @@ public class Main extends Applet {
     private static final String EXPORT_FILE = "Export file";
     private static final String IMPORT_FILE = "Import file";
     private static final String OPEN_A_NEW_WINDOW_FOR_ENTERING_THE_PASSPORT_DATA = "Open a new window for entering the passport data";
+    private final ArrayList<Passport> passports = new ArrayList<>();
     private JPanel mainJPanel;
     private JButton exportFileButton;
-    private ArrayList<Passport> passports = new ArrayList<>();
     private JLabel errorJFrameField;
     private JFrame frameInputPassportData;
 
