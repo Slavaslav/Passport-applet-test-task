@@ -1,17 +1,15 @@
 package com.java;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 public class Passport {
     public static final String[] PASSPORT_FILED_NAMES = new String[]{"passportNo", "surname", "given names", "patronymic",
             "date birth", "place birth", "authority", "date of issue"};
-    private ArrayList<String> passportData = new ArrayList<>();
+    private ArrayList<String> passportData;
 
-    public Passport(ArrayList<JTextField> textFields) {
-        for (JTextField field : textFields) {
-            passportData.add(field.getText());
-        }
+    public Passport(ArrayList<String> passportData) {
+        this.passportData = passportData;
+
     }
 
     public ArrayList<String> getPassportData() {
