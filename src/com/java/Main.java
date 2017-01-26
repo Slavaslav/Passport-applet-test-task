@@ -100,6 +100,7 @@ public class Main extends Applet {
             passports.clear();
         }
         mainJPanel.removeAll();
+        mainJPanel.updateUI();
     }
 
     private void readAndHandleDataFromFile(File selectedFile) {
