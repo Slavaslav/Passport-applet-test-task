@@ -13,7 +13,18 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Main extends Applet {
-    private static final String INPUT = "Input ";
+    private static final String COMMA = ",";
+    private static final String PASSPORT_DATA_PSDT = "Passport data (*.psdt)";
+    private static final String PSDT = "psdt";
+    private static final String ERROR_ONE_OR_MORE_FIELDS_ARE_NOT_FILLED = "Error! One or more fields are not filled!";
+    private static final String INPUT_PASSPORT_DATA = "Input Passport Data";
+    private static final String OK = "Ok";
+    private static final String CLOSE = "Close";
+    private static final String EXPORT_DATA = "Export data";
+    private static final String IMPORT_DATA = "Import data";
+    private static final String EXPORT_FILE = "Export file";
+    private static final String IMPORT_FILE = "Import file";
+    private static final String OPEN_A_NEW_WINDOW_FOR_ENTERING_THE_PASSPORT_DATA = "Open a new window for entering the passport data";
     private JPanel mainJPanel;
     private JButton exportFileButton;
     private ArrayList<Passport> passports = new ArrayList<>();
@@ -39,7 +50,7 @@ public class Main extends Applet {
     }
 
     private JPanel initializeTopButtons() {
-        JButton openWindowInputPassportDataButton = new JButton("Open a new window for entering the passport data");
+        JButton openWindowInputPassportDataButton = new JButton(OPEN_A_NEW_WINDOW_FOR_ENTERING_THE_PASSPORT_DATA);
         openWindowInputPassportDataButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -47,7 +58,7 @@ public class Main extends Applet {
             }
         });
 
-        JButton importFileButton = new JButton("Import file");
+        JButton importFileButton = new JButton(IMPORT_FILE);
         importFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -55,7 +66,7 @@ public class Main extends Applet {
             }
         });
 
-        exportFileButton = new JButton("Export file");
+        exportFileButton = new JButton(EXPORT_FILE);
         exportFileButton.setEnabled(false);
         exportFileButton.addActionListener(new ActionListener() {
             @Override
@@ -76,7 +87,7 @@ public class Main extends Applet {
     }
 
     private void importPassportDataFromFile() {
-        File selectedFile = getSelectedFileFromFileChooser("Import data");
+        File selectedFile = getSelectedFileFromFileChooser(IMPORT_DATA);
         if (selectedFile != null) {
             hideExportButton();
             clearOldPassportData();
@@ -113,10 +124,9 @@ public class Main extends Applet {
     }
 
     private void handlePassportDataFromFile(String line) {
-        String[] passportDataSplit = line.split(",");
+        String[] passportDataSplit = line.split(COMMA);
         ArrayList<String> passportData = new ArrayList<>(Arrays.asList(passportDataSplit));
         handlePassportDataToShow(passportData);
-
     }
 
     private void handlePassportDataToShow(ArrayList<String> passportData) {
@@ -127,7 +137,7 @@ public class Main extends Applet {
 
     private void exportPassportDataToFile() {
         if (passports.size() > 0) {
-            File selectedFile = getSelectedFileFromFileChooser("Export data");
+            File selectedFile = getSelectedFileFromFileChooser(EXPORT_DATA);
             if (selectedFile != null) {
                 writeDataToFile(selectedFile);
             }
@@ -135,19 +145,19 @@ public class Main extends Applet {
     }
 
     private void openNewJFrameInputPassportData() {
-        final JFrame frame = new JFrame("Input Passport Data");
+        final JFrame frame = new JFrame(INPUT_PASSPORT_DATA);
 
         final ArrayList<JLabel> labels = initializeLabels();
         final ArrayList<JTextField> textFields = initializeTextFields();
 
-        JButton okButton = new JButton("Ok");
+        JButton okButton = new JButton(OK);
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 handleOnClickOkButton(labels, textFields, frame);
             }
         });
-        JButton closeButton = new JButton("Close");
+        JButton closeButton = new JButton(CLOSE);
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -166,10 +176,10 @@ public class Main extends Applet {
     private ArrayList<JLabel> initializeLabels() {
         ArrayList<JLabel> labels = new ArrayList<>();
         for (String labelNames : Passport.PASSPORT_FILED_NAMES) {
-            labels.add(new JLabel(INPUT.concat(labelNames).concat(":")));
+            labels.add(new JLabel(Passport.INPUT.concat(labelNames).concat(Passport.DOTS)));
         }
         // label error must be last element in array
-        final JLabel errorEmptyFields = new JLabel("Error! One or more fields are not filled!");
+        final JLabel errorEmptyFields = new JLabel(ERROR_ONE_OR_MORE_FIELDS_ARE_NOT_FILLED);
         errorEmptyFields.setVisible(false);
         errorEmptyFields.setForeground(Color.RED);
         labels.add(errorEmptyFields);
@@ -278,7 +288,7 @@ public class Main extends Applet {
     private File getSelectedFileFromFileChooser(String dialogTitle) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle(dialogTitle);
-        FileFilter filter = new FileNameExtensionFilter("Passport data (*.psdt)", "psdt");
+        FileFilter filter = new FileNameExtensionFilter(PASSPORT_DATA_PSDT, PSDT);
         fileChooser.setFileFilter(filter);
         int returnVal = fileChooser.showOpenDialog(null);
         File selectedFile = null;
@@ -300,7 +310,7 @@ public class Main extends Applet {
                     if (i == passport.getPassportData().size() - 1) {
                         stringBuilder.append("\n");
                     } else {
-                        stringBuilder.append(",");
+                        stringBuilder.append(COMMA);
                     }
                 }
                 writer.write(stringBuilder.toString());
@@ -333,7 +343,7 @@ public class Main extends Applet {
                     }
                 }
             }
-            String[] columnNames = {"Labels", "Data"};
+            String[] columnNames = {"", ""};
             JTable jTable = new JTable(tableData, columnNames);
             add(jTable);
         }
