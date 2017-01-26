@@ -7,11 +7,10 @@ import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main extends Applet {
     private static final String INPUT = "Input ";
@@ -52,7 +51,7 @@ public class Main extends Applet {
         importFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // empty
+                importPassportDataFromFile();
             }
         });
 
@@ -74,6 +73,51 @@ public class Main extends Applet {
         topButtonJPanel.add(Box.createRigidArea(new Dimension(5, 0)));
         topButtonJPanel.add(exportFileButton);
         return topButtonJPanel;
+    }
+
+    private void importPassportDataFromFile() {
+        File selectedFile = getSelectedFileFromFileChooser("Import data");
+        if (selectedFile != null) {
+            if (passports.size() > 0) {
+                passports.clear();
+            }
+            hideExportButton();
+            readAndHandleDataFromFile(selectedFile);
+        }
+    }
+
+    private void readAndHandleDataFromFile(File selectedFile) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(selectedFile));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                handlePassportDataFromFile(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void handlePassportDataFromFile(String line) {
+        String[] passportDataSplit = line.split(",");
+        ArrayList<String> passportData = new ArrayList<>(Arrays.asList(passportDataSplit));
+        handlePassportDataToShow(passportData);
+
+    }
+
+    private void handlePassportDataToShow(ArrayList<String> passportData) {
+        Passport passport = addAndGetNewPassport(passportData);
+        drawTableWithPassportData(passport);
+        showExportButton();
     }
 
     private void exportPassportDataToFile() {
@@ -178,9 +222,7 @@ public class Main extends Applet {
             for (JTextField field : textFields) {
                 passportData.add(field.getText());
             }
-            Passport passport = addAndGetNewPassport(passportData);
-            drawTableWithPassportData(passport);
-            showExportButton();
+            handlePassportDataToShow(passportData);
         }
     }
 
@@ -190,7 +232,13 @@ public class Main extends Applet {
         }
     }
 
-    private Passport addAndGetNewPassport(ArrayList<String> passportData) {
+    private void hideExportButton() {
+        if (exportFileButton.isEnabled()) {
+            exportFileButton.setEnabled(false);
+        }
+    }
+
+    private Passport addAndGetNewPassport(List<String> passportData) {
         Passport passport = new Passport(passportData);
         passports.add(passport);
         return passport;
